@@ -1,4 +1,4 @@
-import User from "../model/User.js" 
+import User from "../../model/User.js" 
 import bcrypt from "bcrypt"
 import jwt from "jsonwebtoken"
 const register=async(req,res)=>{
@@ -13,6 +13,7 @@ const register=async(req,res)=>{
     password:hashedPassword,
     name
    })
+   console.log(`user created successfully \n ${user}`)
    return res.status(201).json({message:"user created successfully"})
  } catch (error) {
   return res.status(500).json({message:error.message})
@@ -35,15 +36,22 @@ const login=async(req,res)=>{
     if(!isPasswordValid) {
       return res.status(400).json({message:"invalid password"})
     }
-    const payload={id:user._id,email:email,name:name}
-    const token=jwt.sign(payload,process.env.jwt_key)
-    return res.status(200).json({message:"user logged in successfully"})
+    const payload={id:user._id,email:email,name:user.name}
+    const token=jwt.sign(payload,process.env.jwt_key,{expiresIn:"7d"})
+    return res.cookie("token",token,{httpOnly:true,maxAge:7*24*60*60*1000}).status(200).json({message:"user logged in successfully"})
+  } catch (error) {
+    return res.status(500).json({message:error.message})
+  }
+}
+const logout=async(req,res)=>{
+  try {
+    return res.clearCookie("token").status(200).json({message:"user logged out successfully"})
   } catch (error) {
     return res.status(500).json({message:error.message})
   }
 }
 
-export { register, login };
+export { register, login,logout };
 
 
 //forgot,verify,logout,updatepwd
