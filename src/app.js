@@ -24,7 +24,7 @@ app.post("/create-task",createTask);
 
 app.post("/display-task",displayTask);
 
-app.post("/delete-task",deleteTask);
+app.delete("/delete-task/:id",deleteTask);
 
 app.post("/logout",logout)
 app.post("/architect",async(req,res)=>{try {
