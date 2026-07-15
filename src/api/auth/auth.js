@@ -38,14 +38,14 @@ const login=async(req,res)=>{
     }
     const payload={id:user._id,email:email,name:user.name}
     const token=jwt.sign(payload,process.env.jwt_key,{expiresIn:"7d"})
-    return res.cookie("token",token,{httpOnly:true,maxAge:7*24*60*60*1000}).status(200).json({message:"user logged in successfully"})
+    return res.cookie("token",token,{httpOnly:true,maxAge:7*24*60*60*1000, sameSite: "none", secure: true}).status(200).json({message:"user logged in successfully"})
   } catch (error) {
     return res.status(500).json({message:error.message})
   }
 }
 const logout=async(req,res)=>{
   try {
-    return res.clearCookie("token").status(200).json({message:"user logged out successfully"})
+    return res.clearCookie("token", { sameSite: "none", secure: true }).status(200).json({message:"user logged out successfully"})
   } catch (error) {
     return res.status(500).json({message:error.message})
   }
