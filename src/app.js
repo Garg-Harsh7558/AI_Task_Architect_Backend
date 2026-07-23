@@ -2,7 +2,7 @@ import express from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import authMiddleware from "../middleware/authMiddleware.js";
-import { register, login, logout } from "./api/auth/auth.js";
+import { register, login, logout, forgot, verify, updatepwd } from "./api/auth/auth.js";
 import createTask from "./api/Task/createTask.js";
 import displayTask from "./api/Task/displayTask.js";
 import deleteTask from "./api/Task/deleteTask.js";
@@ -20,6 +20,9 @@ app.get("/", (req, res) => {
 });
 app.post("/register",register);
 app.post("/login",login);
+app.post("/forgot",forgot);
+app.post("/verify",verify);
+app.post("/updatepwd",updatepwd);
 
 app.use(authMiddleware)
 
